@@ -26,9 +26,16 @@ contract SimpleStorage {
     // State variable to store the current contract state
     ContractState public state; 
 
+    // Part 2: Mapping to store names and associated favorite numbers
+    mapping(string => uint256) public nameToFavoriteNumber;
+
+    // Part 3: Event to log when the favorite number is updated
+    event NumberUpdated(uint256 newFavoriteNumber);
+
     // Function to store a favorite number
     function storeNumber(uint256 _favoriteNumber) public {
         favoriteNumber = _favoriteNumber;
+        emit NumberUpdated(_favoriteNumber); // Emit the event when number is updated
     }
 
     // Function to retrieve the favorite number
@@ -75,9 +82,10 @@ contract SimpleStorage {
         favoriteNumbers.push(_favoriteNumber);
     }
 
-    // Function to add a person
+    // Function to add a person and store their favorite number in the mapping
     function addPerson(string memory _name, uint256 _favoriteNumber) public {
         people.push(Person(_name, _favoriteNumber));
+        nameToFavoriteNumber[_name] = _favoriteNumber; // Add to the mapping
     }
 
     // Function to activate the contract
@@ -93,5 +101,23 @@ contract SimpleStorage {
     // Function to check if the contract is active
     function isActive() public view returns (bool) {
         return state == ContractState.Active;
+    }
+
+    // Part 4: Function demonstrating storage, memory, and calldata usage
+
+    // Function using a storage variable for persistent storage
+    function updateFavoriteNumberStorage(uint256 _newFavoriteNumber) public {
+        favoriteNumber = _newFavoriteNumber;
+    }
+
+    // Function using memory for temporary calculations
+    function temporarySum(uint256 _num1, uint256 _num2) public pure returns (uint256) {
+        uint256 sum = _num1 + _num2; // Stored temporarily in memory
+        return sum;
+    }
+
+    // Function demonstrating calldata usage
+    function processCalldataString(string calldata _input) public pure returns (string memory) {
+        return _input;
     }
 }
